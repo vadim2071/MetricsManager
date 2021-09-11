@@ -20,24 +20,7 @@ namespace MetricsManager.Controllers
             _logger.LogDebug(1, "NLog встроен в CpuMetricsController");
         }
 
-        [HttpGet("sql-test")]
-        public IActionResult TryToSqlLite()
-        {
-            string cs = "Data Source=:memory:";
-            string stm = "SELECT SQLITE_VERSION()";
-
-
-            using (var con = new SQLiteConnection(cs))
-            {
-                con.Open();
-
-                using var cmd = new SQLiteCommand(stm, con);
-                string version = cmd.ExecuteScalar().ToString();
-
-                return Ok(version);
-            }
-        }
-
+        
         [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsFromAgent(
             [FromRoute] int agentId,
