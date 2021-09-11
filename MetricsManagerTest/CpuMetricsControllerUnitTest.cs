@@ -8,7 +8,7 @@ namespace MetricsManagerTest
     public class CpuMetricsControllerUnitTest
     {
         private CpuMetricsController controller;
-
+        
         public CpuMetricsControllerUnitTest()
         {
             controller = new CpuMetricsController();
