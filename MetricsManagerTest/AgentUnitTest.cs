@@ -2,6 +2,7 @@ using System;
 using Xunit;
 using MetricsManager.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 
 namespace MetricsManagerTest
 {

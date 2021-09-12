@@ -2,7 +2,7 @@
 
 namespace MetricsManager
 {
-    public class CpuMetricDto
+    public class CpuMetric
     {
         public int Id { get; set; }
         public int Value { get; set; }

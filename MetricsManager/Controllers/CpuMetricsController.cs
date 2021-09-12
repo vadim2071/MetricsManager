@@ -12,19 +12,21 @@ namespace MetricsManager.Controllers
     [ApiController]
     public class CpuMetricsController : ControllerBase
     {
-        private readonly ILogger<CpuMetricsController> _logger;
+        //private readonly ILogger<CpuMetricsController> _logger;
         private ICpuMetricsRepository repository;
 
         public CpuMetricsController(ICpuMetricsRepository repository)
         {
             this.repository = repository;
         }
+
         [HttpPost("create")]
         public IActionResult Create([FromBody] CpuMetricCreateRequest request)
         {
-            repository.Create(new CpuMetricDto{Time = request.Time, Value = request.Value});
+            repository.Create(new CpuMetric{Time = request.Time, Value = request.Value});
             return Ok();
         }
+
         [HttpGet("all")]
         public IActionResult GetAll()
         {
@@ -40,11 +42,11 @@ namespace MetricsManager.Controllers
         }
 
         //логирование
-        public CpuMetricsController(ILogger<CpuMetricsController> logger)
+        /*public CpuMetricsController(ILogger<CpuMetricsController> logger)
         {
             _logger = logger;
             _logger.LogDebug(1, "NLog встроен в CpuMetricsController");
-        }
+        }*/
 
         
         [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
@@ -53,7 +55,7 @@ namespace MetricsManager.Controllers
             [FromRoute] TimeSpan fromTime,
             [FromRoute] TimeSpan toTime)
         {
-            _logger.LogInformation("Привет! Это наше первое сообщение в лог");
+            //_logger.LogInformation("Привет! Это наше первое сообщение в лог");
             return Ok();
         }
 

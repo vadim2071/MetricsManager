@@ -30,9 +30,7 @@ namespace MetricsManager.Controllers
     public class AgentCreateDto
     {
         public int AgentId { get; set; }
-
         public Uri AgentAddress { get; set; }
-
         public AgentCreateDto(int _agentId, Uri _agentAdress)
         {
             AgentId = _agentId;
