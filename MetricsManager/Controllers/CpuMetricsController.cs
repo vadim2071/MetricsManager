@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using System.Data.SQLite;
+using System.Collections.Generic;
+using MetricsManager.Repository;
+using MetricsManager.Requests;
+using MetricsManager.Responses;
 
 namespace MetricsManager.Controllers
 {
@@ -13,7 +13,33 @@ namespace MetricsManager.Controllers
     public class CpuMetricsController : ControllerBase
     {
         private readonly ILogger<CpuMetricsController> _logger;
+        private ICpuMetricsRepository repository;
 
+        public CpuMetricsController(ICpuMetricsRepository repository)
+        {
+            this.repository = repository;
+        }
+        [HttpPost("create")]
+        public IActionResult Create([FromBody] CpuMetricCreateRequest request)
+        {
+            repository.Create(new CpuMetricDto{Time = request.Time, Value = request.Value});
+            return Ok();
+        }
+        [HttpGet("all")]
+        public IActionResult GetAll()
+        {
+            var metrics = repository.GetAll();
+            var response = new AllCpuMetricsResponse(){Metrics = new List<CpuMetricDto>()};
+
+            foreach (var metric in metrics)
+            {
+                response.Metrics.Add(new CpuMetricDto { Time = metric.Time, Value = metric.Value, Id = metric.Id });
+            }
+
+            return Ok(response);
+        }
+
+        //логирование
         public CpuMetricsController(ILogger<CpuMetricsController> logger)
         {
             _logger = logger;

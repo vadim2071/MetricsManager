@@ -1,24 +1,24 @@
-﻿using Metrics.Services.Interface;
-using MetricsManager;
+﻿using MetricsManager.Interface;
 using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 
 
-namespace Metrics.Services
+namespace MetricsManager.Repository
 {
     // маркировочный интерфейс
     // необходим, чтобы проверить работу репозитория на тесте-заглушке
-    public interface ICpuMetricsRepository : IRepository<CpuMetric>
+    public interface ICpuMetricsRepository : IRepository<CpuMetricDto>
     {
 
     }
 
     public class CpuMetricsRepository : ICpuMetricsRepository
     {
-        private const string ConnectionString = "Data Source=metrics.db;Version=3;Pooling=true;Max Pool Size=100;"
+        private const string ConnectionString = "Data Source=metrics.db;Version=3;Pooling=true;Max Pool Size=100;";
         // инжектируем соединение с базой данных в наш репозиторий через конструктор
 
-        public void Create(CpuMetric item)
+        public void Create(CpuMetricDto item)
         {
             using var connection = new SQLiteConnection(ConnectionString);
             connection.Open();
@@ -53,7 +53,7 @@ namespace Metrics.Services
             cmd.ExecuteNonQuery();
         }
 
-        public void Update(CpuMetric item)
+        public void Update(CpuMetricDto item)
         {
             using var connection = new SQLiteConnection(ConnectionString);
             using var cmd = new SQLiteCommand(connection);
@@ -67,7 +67,7 @@ namespace Metrics.Services
             cmd.ExecuteNonQuery();
         }
 
-        public IList<CpuMetric> GetAll()
+        public IList<CpuMetricDto> GetAll()
         {
             using var connection = new SQLiteConnection(ConnectionString);
             connection.Open();
@@ -76,7 +76,7 @@ namespace Metrics.Services
             // прописываем в команду SQL запрос на получение всех данных из таблицы
             cmd.CommandText = "SELECT * FROM cpumetrics";
 
-            var returnList = new List<CpuMetric>();
+            var returnList = new List<CpuMetricDto>();
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -84,7 +84,7 @@ namespace Metrics.Services
                 while (reader.Read())
                 {
                     // добавляем объект в список возврата
-                    returnList.Add(new CpuMetric
+                    returnList.Add(new CpuMetricDto
                     {
                         Id = reader.GetInt32(0),
                         Value = reader.GetInt32(1),
@@ -97,7 +97,7 @@ namespace Metrics.Services
             return returnList;
         }
 
-        public CpuMetric GetById(int id)
+        public CpuMetricDto GetById(int id)
         {
             using var connection = new SQLiteConnection(ConnectionString);
             connection.Open();
@@ -109,7 +109,7 @@ namespace Metrics.Services
                 if (reader.Read())
                 {
                     // возвращаем прочитанное
-                    return new CpuMetric
+                    return new CpuMetricDto
                     {
                         Id = reader.GetInt32(0),
                         Value = reader.GetInt32(1),
